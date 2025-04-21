@@ -1,19 +1,41 @@
 from fastapi import FastAPI
-from app.db import Base, engine
-from app.routers import player, tournament, match
+from fastapi.middleware.cors import CORSMiddleware
 
-# DB Initialisierung
-Base.metadata.create_all(bind=engine)
+from app.routers import (
+    player,
+    tournament,
+    match,
+    ranking,
+    snapshot  # falls du snapshot.py schon eingebunden hast
+)
 
-app = FastAPI(title="Dartclub Verwaltung", version="1.0.0")
+app = FastAPI(
+    title="Dartclub Backend",
+    description="🎯 FastAPI Backend zur Turnier- und Spielerverwaltung",
+    version="1.5.0"
+)
 
-# Routen registrieren
-app.include_router(player.router, prefix="/player", tags=["Spieler"])
-app.include_router(tournament.router, prefix="/tournament", tags=["Turniere"])
+# CORS (für zukünftiges Frontend)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # später einschränken für Produktion
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/ping", tags=["System"])
-def ping():
-    return {"status": "OK 🟢"}
+# ROUTER registrieren
+app.include_router(player.router, prefix="/player")
+app.include_router(tournament.router, prefix="/tournament")
+app.include_router(match.router, prefix="/match")
+app.include_router(ranking.router)
+app.include_router(snapshot.router)  # Optional: nur wenn Snapshot-API aktiv ist
 
-from app.routers import match  # oben ergänzen
-app.include_router(match.router, prefix="/match", tags=["Matches"])  # unten ergänzen
+# ROOT-ROUTE
+@app.get("/")
+def root():
+    return {
+        "message": "🚀 Dartclub Backend läuft!",
+        "swagger": "/docs",
+        "redoc": "/redoc"
+    }

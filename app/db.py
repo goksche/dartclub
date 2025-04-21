@@ -15,3 +15,9 @@ def get_db():
         yield db
     finally:
         db.close()
+
+from app.models.snapshot import RankingSnapshot
+
+# Nur bei Bedarf einmal ausführen – z. B. im Startscript oder interaktiv
+def init_snapshot_table():
+    Base.metadata.create_all(bind=engine)
