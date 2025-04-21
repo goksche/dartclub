@@ -24,3 +24,16 @@ def report_match_result(db: Session, match_id: int, report: MatchReport):
 
 def get_matches_by_tournament(db: Session, tournament_id: int):
     return db.query(Match).filter(Match.tournament_id == tournament_id).all()
+
+def create_ko_match(db: Session, tournament_id: int, p1_id: int, p2_id: int | None, best_of: int, round: int):
+    match = Match(
+        tournament_id=tournament_id,
+        player1_id=p1_id,
+        player2_id=p2_id,
+        best_of=best_of,
+        round=round
+    )
+    db.add(match)
+    db.commit()
+    db.refresh(match)
+    return match

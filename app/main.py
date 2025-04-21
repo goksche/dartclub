@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from app.routers import player, tournament
 from app.db import Base, engine
+from app.routers import player, tournament, match
 
 # DB Initialisierung
 Base.metadata.create_all(bind=engine)
