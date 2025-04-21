@@ -8,6 +8,7 @@ class TournamentBase(BaseModel):
     mode: Literal["liga", "ko", "gruppe"]
     date: date
     is_ranked: bool = False
+    best_of: Literal[3, 5, 7, 9, 11] = 3
 
 class TournamentCreate(TournamentBase):
     pass

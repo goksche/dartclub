@@ -14,3 +14,6 @@ app.include_router(tournament.router, prefix="/tournament", tags=["Turniere"])
 @app.get("/ping", tags=["System"])
 def ping():
     return {"status": "OK 🟢"}
+
+from app.routers import match  # oben ergänzen
+app.include_router(match.router, prefix="/match", tags=["Matches"])  # unten ergänzen
