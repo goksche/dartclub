@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import date
-from typing import Literal
+from typing import Literal, List
 
 class TournamentBase(BaseModel):
     name: str
@@ -9,6 +9,7 @@ class TournamentBase(BaseModel):
     date: date
     is_ranked: bool = False
     best_of: Literal[3, 5, 7, 9, 11] = 3
+    seeded_players: List[int] = []  # 👈 NEU: gesetzte Spieler
 
 class TournamentCreate(TournamentBase):
     pass
